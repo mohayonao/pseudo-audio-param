@@ -1,0 +1,27 @@
+{
+  "name": "pseudo-audio-param",
+  "description": "Simulate scheduled AudioParam values",
+  "version": "0.0.0",
+  "author": "Nao Yonamine <mohayonao@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/mohayonao/pseudo-audio-param/issues"
+  },
+  "files": [
+    "lib",
+    "index.js",
+    "package.json",
+    "README.md"
+  ],
+  "homepage": "https://github.com/mohayonao/pseudo-audio-param/",
+  "keywords": [
+    "AudioParam",
+    "WebAudioAPI",
+    "simulator"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mohayonao/pseudo-audio-param/"
+  }
+}
