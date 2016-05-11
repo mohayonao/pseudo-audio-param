@@ -27,6 +27,7 @@ describe("PseudoAudioParam", () => {
       assert(param instanceof PseudoAudioParam);
     });
   });
+
   describe("#setValueAtTime(value: number, time: number): self", () => {
     it("inserts 'setValueAtTime' event into the schedule at time", () => {
       let param = new PseudoAudioParam()
@@ -34,12 +35,13 @@ describe("PseudoAudioParam", () => {
         .setValueAtTime(2, 20)
         .setValueAtTime(1, 10)
         .setValueAtTime(3, 20);
+      // console.log(param.events);
 
       assert(param instanceof PseudoAudioParam);
       assert.deepEqual(param.events, [
-        { type: "setValueAtTime", time: 0, args: [ 0, 0 ] },
-        { type: "setValueAtTime", time: 10, args: [ 1, 10 ] },
-        { type: "setValueAtTime", time: 20, args: [ 3, 20 ] }
+        { type: "setValueAtTime", time: 0, value: 0, args: [ 0, 0 ] },
+        { type: "setValueAtTime", time: 10, value: 1, args: [ 1, 10 ] },
+        { type: "setValueAtTime", time: 20, value: 3, args: [ 3, 20 ] }
       ]);
       assert(param.getValueAtTime(0) === 0);
       assert(param.getValueAtTime(5) === 0);
@@ -49,6 +51,7 @@ describe("PseudoAudioParam", () => {
       assert(param.getValueAtTime(25) === 3);
     });
   });
+
   describe("#linearRampToValueAtTime(value: number, time: number): self", () => {
     it("inserts 'linearRampToValueAtTime' event into the schedule at time", () => {
       let param = new PseudoAudioParam()
@@ -59,9 +62,9 @@ describe("PseudoAudioParam", () => {
 
       assert(param instanceof PseudoAudioParam);
       assert.deepEqual(param.events, [
-        { type: "setValueAtTime", time: 0, args: [ 0, 0 ] },
-        { type: "linearRampToValueAtTime", time: 10, args: [ 1, 10 ] },
-        { type: "linearRampToValueAtTime", time: 20, args: [ 3, 20 ] }
+        { type: "setValueAtTime", time: 0, value: 0, args: [ 0, 0 ] },
+        { type: "linearRampToValueAtTime", time: 10, value: 1, args: [ 1, 10 ] },
+        { type: "linearRampToValueAtTime", time: 20, value: 3, args: [ 3, 20 ] }
       ]);
       assert(param.getValueAtTime(0) === 0);
       assert(param.getValueAtTime(5) === 0.5);
@@ -71,6 +74,7 @@ describe("PseudoAudioParam", () => {
       assert(param.getValueAtTime(25) === 3);
     });
   });
+
   describe("#exponentialRampToValueAtTime(value: number, time: number): self", () => {
     it("inserts 'exponentialRampToValueAtTime' event into the schedule at time", () => {
       let param = new PseudoAudioParam()
@@ -81,9 +85,9 @@ describe("PseudoAudioParam", () => {
 
       assert(param instanceof PseudoAudioParam);
       assert.deepEqual(param.events, [
-        { type: "setValueAtTime", time: 0, args: [ 1e-4, 0 ] },
-        { type: "exponentialRampToValueAtTime", time: 10, args: [ 1, 10 ] },
-        { type: "exponentialRampToValueAtTime", time: 20, args: [ 3, 20 ] }
+        { type: "setValueAtTime", time: 0, value: 1e-4, args: [ 1e-4, 0 ] },
+        { type: "exponentialRampToValueAtTime", time: 10, value: 1, args: [ 1, 10 ] },
+        { type: "exponentialRampToValueAtTime", time: 20, value: 3, args: [ 3, 20 ] }
       ]);
       assert(param.getValueAtTime(0) === 1e-4);
       assert(closeTo(param.getValueAtTime(5), 0.01, 1e-4));
@@ -93,6 +97,7 @@ describe("PseudoAudioParam", () => {
       assert(param.getValueAtTime(25) === 3);
     });
   });
+
   describe("#setTargetAtTime(value: number, time: number, timeConstant: number): self", () => {
     it("inserts 'setTargetAtTime' event into the schedule at time", () => {
       let param = new PseudoAudioParam()
@@ -103,10 +108,11 @@ describe("PseudoAudioParam", () => {
 
       assert(param instanceof PseudoAudioParam);
       assert.deepEqual(param.events, [
-        { type: "setValueAtTime", time: 0, args: [ 0, 0 ] },
-        { type: "setTargetAtTime", time: 10, args: [ 1, 10, 2 ] },
-        { type: "setTargetAtTime", time: 20, args: [ 3, 20, 2 ] }
+        { type: "setValueAtTime", time: 0, value: 0, args: [ 0, 0 ] },
+        { type: "setTargetAtTime", time: 10, value: 1, timeConstant: 2, args: [ 1, 10, 2 ] },
+        { type: "setTargetAtTime", time: 20, value: 3, timeConstant: 2, args: [ 3, 20, 2 ] }
       ]);
+
       assert(param.getValueAtTime(0) === 0);
       assert(param.getValueAtTime(5) === 0);
       assert(param.getValueAtTime(10) === 0);
@@ -115,6 +121,7 @@ describe("PseudoAudioParam", () => {
       assert(closeTo(param.getValueAtTime(25), 2.835276, 1e-4));
     });
   });
+  
   describe("#setValueCurveAtTime(curve: Float32Array, time: number, duration: number): self", () => {
     it("inserts 'setValueCurveAtTime' event into the schedule at time", () => {
       let curve = (() => {
@@ -134,9 +141,9 @@ describe("PseudoAudioParam", () => {
 
       assert(param instanceof PseudoAudioParam);
       assert.deepEqual(param.events, [
-        { type: "setValueAtTime", time: 0, args: [ 0, 0 ] },
-        { type: "setValueCurveAtTime", time: 10, args: [ curve, 10, 10 ] },
-        { type: "setValueCurveAtTime", time: 20, args: [ curve, 20, 20 ] }
+        { type: "setValueAtTime", time: 0, value: 0, args: [ 0, 0 ] },
+        { type: "setValueCurveAtTime", time: 10, curve: curve, duration: 10, args: [ curve, 10, 10 ] },
+        { type: "setValueCurveAtTime", time: 20, curve: curve, duration: 20, args: [ curve, 20, 20 ] }
       ]);
       assert(param.getValueAtTime(0) === 0);
       assert(param.getValueAtTime(5) === 0);
@@ -146,6 +153,7 @@ describe("PseudoAudioParam", () => {
       assert(closeTo(param.getValueAtTime(25), 0.702715, 1e-4));
     });
   });
+  
   describe("#cancelScheduledValues(time: number): self", () => {
     it("removes events from the schedule after time", () => {
       let param = new PseudoAudioParam()
@@ -155,15 +163,17 @@ describe("PseudoAudioParam", () => {
 
       assert(param instanceof PseudoAudioParam);
       assert.deepEqual(param.events, [
-        { type: "setValueAtTime", time: 0, args: [ 0, 0 ] }
+        { type: "setValueAtTime", time: 0, value: 0, args: [ 0, 0 ] }
       ]);
     });
   });
+  
   describe("#getValueAtTime(time: number): number", () => {
     it("returns value at time", () => {
 
     });
   });
+
   describe("#applyTo(audioParam: AudioParam): self", () => {
     it("call scheduled api methods to the audioParam", () => {
       let audioParam = createAudioParamMock();
@@ -177,4 +187,5 @@ describe("PseudoAudioParam", () => {
       assert.deepEqual(audioParam.setValueAtTime.args[1], [ 1, 10 ]);
     });
   });
+
 });
