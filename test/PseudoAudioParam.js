@@ -35,7 +35,6 @@ describe("PseudoAudioParam", () => {
         .setValueAtTime(2, 20)
         .setValueAtTime(1, 10)
         .setValueAtTime(3, 20);
-      // console.log(param.events);
 
       assert(param instanceof PseudoAudioParam);
       assert.deepEqual(param.events, [
@@ -43,6 +42,7 @@ describe("PseudoAudioParam", () => {
         { type: "setValueAtTime", time: 10, value: 1, args: [ 1, 10 ] },
         { type: "setValueAtTime", time: 20, value: 3, args: [ 3, 20 ] }
       ]);
+
       assert(param.getValueAtTime(0) === 0);
       assert(param.getValueAtTime(5) === 0);
       assert(param.getValueAtTime(10) === 1);
