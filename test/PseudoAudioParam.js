@@ -219,7 +219,7 @@ describe("PseudoAudioParam", () => {
     });
   });
 
-  describe("#applyTo(audioParam: AudioParam): self", () => {
+  describe("#applyTo(audioParam: AudioParam, reset: boolean): self", () => {
     it("call scheduled api methods to the audioParam", () => {
       const audioParam = createAudioParamMock();
       const param = new PseudoAudioParam()
@@ -227,9 +227,23 @@ describe("PseudoAudioParam", () => {
         .setValueAtTime(1, 10)
         .applyTo(audioParam);
 
+      assert(audioParam.cancelScheduledValues.callCount === 0);
       assert(audioParam.setValueAtTime.callCount === 2);
       assert.deepEqual(audioParam.setValueAtTime.args[0], [ 0, 0 ]);
       assert.deepEqual(audioParam.setValueAtTime.args[1], [ 1, 10 ]);
+    });
+    it("call scheduled api methods to the audioParam after cancel all events", () => {
+      const audioParam = createAudioParamMock();
+      const param = new PseudoAudioParam()
+        .setValueAtTime(0, 0)
+        .setValueAtTime(1, 10)
+        .applyTo(audioParam, true);
+
+      assert(audioParam.cancelScheduledValues.callCount === 1);
+      assert(audioParam.setValueAtTime.callCount === 2);
+      assert.deepEqual(audioParam.setValueAtTime.args[0], [ 0, 0 ]);
+      assert.deepEqual(audioParam.setValueAtTime.args[1], [ 1, 10 ]);
+      assert(audioParam.cancelScheduledValues.calledBefore(audioParam.setValueAtTime));
     });
   });
 
