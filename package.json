@@ -1,7 +1,7 @@
 {
   "name": "pseudo-audio-param",
   "description": "Simulate scheduled AudioParam values",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Nao Yonamine <mohayonao@gmail.com>",
   "bugs": {
     "url": "https://github.com/mohayonao/pseudo-audio-param/issues"
@@ -31,6 +31,9 @@
   },
   "scripts": {
     "cover": "istanbul cover --report text --report html --report lcov _mocha",
+    "postversion": "git push && git push --tags",
+    "prepublish": "npm run test",
+    "preversion": "npm run test",
     "test": "mocha",
     "travis": "npm run test"
   }

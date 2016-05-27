@@ -15,13 +15,22 @@ $ npm install pseudo-audio-param
 
 - `constructor(defaultValue: number)`
 - `getValueAtTime(time: number): number`
+  - return scheduled value at `time`
+- `applyTo(audioParam: AudioParam, [ reset: boolean ]): self`
+  - apply scheduled methods to the provided `audioParam`
+  - if `reset` is true, cancel all events of AudioParam before applying
+- `events: object[]`
+  - `.type: string`
+  - `.time: number`
+
+compatible interfaces with [AudioParam](https://www.w3.org/TR/webaudio/#AudioParam)
+
 - `setValueAtTime(value: number, time: number): self`
 - `linearRampToValueAtTime(value: number, time: number): self`
 - `exponentialRampToValueAtTime(value: number, time: number): self`
 - `setTargetAtTime(value: number, time: number: timeConstant: number): self`
-- `setValueCurveAtTime(curve: Float32Array, time: number, duration: number): self`
+- `setValueCurveAtTime(values: Float32Array, time: number, duration: number): self`
 - `cancelScheduledValues(time: number): self`
-- `applyTo(audioParam: AudioParam): self`
 
 ## Example
 https://www.w3.org/TR/webaudio/#example1-AudioParam
