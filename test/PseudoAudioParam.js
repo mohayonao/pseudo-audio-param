@@ -22,7 +22,7 @@ function createAudioParamMock() {
 describe("PseudoAudioParam", () => {
   describe("constructor(defaultValue: number): PseudoAudioParam", () => {
     it("creates a PseudoAudioParam instance", () => {
-      let param = new PseudoAudioParam(1);
+      const param = new PseudoAudioParam(1);
 
       assert(param instanceof PseudoAudioParam);
     });
@@ -30,12 +30,11 @@ describe("PseudoAudioParam", () => {
 
   describe("#setValueAtTime(value: number, time: number): self", () => {
     it("inserts 'setValueAtTime' event into the schedule at time", () => {
-      let param = new PseudoAudioParam()
+      const param = new PseudoAudioParam()
         .setValueAtTime(0, 0)
         .setValueAtTime(2, 20)
         .setValueAtTime(1, 10)
         .setValueAtTime(3, 20);
-      // console.log(param.events);
 
       assert(param instanceof PseudoAudioParam);
       assert.deepEqual(param.events, [
@@ -54,7 +53,7 @@ describe("PseudoAudioParam", () => {
 
   describe("#linearRampToValueAtTime(value: number, time: number): self", () => {
     it("inserts 'linearRampToValueAtTime' event into the schedule at time", () => {
-      let param = new PseudoAudioParam()
+      const param = new PseudoAudioParam()
         .setValueAtTime(0, 0)
         .linearRampToValueAtTime(2, 20)
         .linearRampToValueAtTime(1, 10)
@@ -77,7 +76,7 @@ describe("PseudoAudioParam", () => {
 
   describe("#exponentialRampToValueAtTime(value: number, time: number): self", () => {
     it("inserts 'exponentialRampToValueAtTime' event into the schedule at time", () => {
-      let param = new PseudoAudioParam()
+      const param = new PseudoAudioParam()
         .setValueAtTime(1e-4, 0)
         .exponentialRampToValueAtTime(2, 20)
         .exponentialRampToValueAtTime(1, 10)
@@ -100,7 +99,7 @@ describe("PseudoAudioParam", () => {
 
   describe("#setTargetAtTime(value: number, time: number, timeConstant: number): self", () => {
     it("inserts 'setTargetAtTime' event into the schedule at time", () => {
-      let param = new PseudoAudioParam()
+      const param = new PseudoAudioParam()
         .setValueAtTime(0, 0)
         .setTargetAtTime(2, 20, 2)
         .setTargetAtTime(1, 10, 2)
@@ -121,19 +120,11 @@ describe("PseudoAudioParam", () => {
       assert(closeTo(param.getValueAtTime(25), 2.835276, 1e-4));
     });
   });
-  
+
   describe("#setValueCurveAtTime(curve: Float32Array, time: number, duration: number): self", () => {
     it("inserts 'setValueCurveAtTime' event into the schedule at time", () => {
-      let curve = (() => {
-        let curve = new Float32Array(128);
-
-        for (let i = 0; i < curve.length; i++) {
-          curve[i] = Math.sin(Math.PI * i / curve.length);
-        }
-
-        return curve;
-      })();
-      let param = new PseudoAudioParam()
+      const curve = new Float32Array(128).map((_, i) => Math.sin(Math.PI * i / 128));
+      const param = new PseudoAudioParam()
         .setValueAtTime(0, 0)
         .setValueCurveAtTime(curve, 20, 10)
         .setValueCurveAtTime(curve, 10, 10)
@@ -153,10 +144,10 @@ describe("PseudoAudioParam", () => {
       assert(closeTo(param.getValueAtTime(25), 0.702715, 1e-4));
     });
   });
-  
+
   describe("#cancelScheduledValues(time: number): self", () => {
     it("removes events from the schedule after time", () => {
-      let param = new PseudoAudioParam()
+      const param = new PseudoAudioParam()
         .setValueAtTime(0, 0)
         .setValueAtTime(1, 10)
         .cancelScheduledValues(5);
@@ -167,7 +158,7 @@ describe("PseudoAudioParam", () => {
       ]);
     });
   });
-  
+
   describe("#getValueAtTime(time: number): number", () => {
     it("returns value at time", () => {
 
@@ -176,8 +167,8 @@ describe("PseudoAudioParam", () => {
 
   describe("#applyTo(audioParam: AudioParam): self", () => {
     it("call scheduled api methods to the audioParam", () => {
-      let audioParam = createAudioParamMock();
-      let param = new PseudoAudioParam()
+      const audioParam = createAudioParamMock();
+      const param = new PseudoAudioParam()
         .setValueAtTime(0, 0)
         .setValueAtTime(1, 10)
         .applyTo(audioParam);
