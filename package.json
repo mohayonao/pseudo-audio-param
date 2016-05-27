@@ -31,6 +31,9 @@
   },
   "scripts": {
     "cover": "istanbul cover --report text --report html --report lcov _mocha",
+    "postversion": "git push && git push --tags",
+    "prepublish": "npm run test",
+    "preversion": "npm run test",
     "test": "mocha",
     "travis": "npm run test"
   }
