@@ -37,7 +37,8 @@ describe("PseudoAudioParam", () => {
         .setValueAtTime(3, 20);
 
       assert(param instanceof PseudoAudioParam);
-      assert.deepEqual(param.events, [
+      let events = param.events.traverse().map((node) => { return node.val; });
+      assert.deepEqual(events, [
         { type: "setValueAtTime", time: 0, value: 0, args: [ 0, 0 ] },
         { type: "setValueAtTime", time: 10, value: 1, args: [ 1, 10 ] },
         { type: "setValueAtTime", time: 20, value: 3, args: [ 3, 20 ] }
@@ -61,7 +62,8 @@ describe("PseudoAudioParam", () => {
         .linearRampToValueAtTime(3, 20);
 
       assert(param instanceof PseudoAudioParam);
-      assert.deepEqual(param.events, [
+      let events = param.events.traverse().map((node) => { return node.val; });
+      assert.deepEqual(events, [
         { type: "setValueAtTime", time: 0, value: 0, args: [ 0, 0 ] },
         { type: "linearRampToValueAtTime", time: 10, value: 1, args: [ 1, 10 ] },
         { type: "linearRampToValueAtTime", time: 20, value: 3, args: [ 3, 20 ] }
@@ -84,7 +86,8 @@ describe("PseudoAudioParam", () => {
         .exponentialRampToValueAtTime(3, 20);
 
       assert(param instanceof PseudoAudioParam);
-      assert.deepEqual(param.events, [
+      let events = param.events.traverse().map((node) => { return node.val; });
+      assert.deepEqual(events, [
         { type: "setValueAtTime", time: 0, value: 1e-4, args: [ 1e-4, 0 ] },
         { type: "exponentialRampToValueAtTime", time: 10, value: 1, args: [ 1, 10 ] },
         { type: "exponentialRampToValueAtTime", time: 20, value: 3, args: [ 3, 20 ] }
@@ -107,7 +110,8 @@ describe("PseudoAudioParam", () => {
         .setTargetAtTime(3, 20, 2);
 
       assert(param instanceof PseudoAudioParam);
-      assert.deepEqual(param.events, [
+      let events = param.events.traverse().map((node) => { return node.val; });
+      assert.deepEqual(events, [
         { type: "setValueAtTime", time: 0, value: 0, args: [ 0, 0 ] },
         { type: "setTargetAtTime", time: 10, value: 1, timeConstant: 2, args: [ 1, 10, 2 ] },
         { type: "setTargetAtTime", time: 20, value: 3, timeConstant: 2, args: [ 3, 20, 2 ] }
@@ -140,7 +144,8 @@ describe("PseudoAudioParam", () => {
         .setValueCurveAtTime(curve, 20, 20);
 
       assert(param instanceof PseudoAudioParam);
-      assert.deepEqual(param.events, [
+      let events = param.events.traverse().map((node) => { return node.val; });
+      assert.deepEqual(events, [
         { type: "setValueAtTime", time: 0, value: 0, args: [ 0, 0 ] },
         { type: "setValueCurveAtTime", time: 10, curve: curve, duration: 10, args: [ curve, 10, 10 ] },
         { type: "setValueCurveAtTime", time: 20, curve: curve, duration: 20, args: [ curve, 20, 20 ] }
@@ -162,7 +167,8 @@ describe("PseudoAudioParam", () => {
         .cancelScheduledValues(5);
 
       assert(param instanceof PseudoAudioParam);
-      assert.deepEqual(param.events, [
+      let events = param.events.traverse().map((node) => { return node.val; });
+      assert.deepEqual(events, [
         { type: "setValueAtTime", time: 0, value: 0, args: [ 0, 0 ] }
       ]);
     });
