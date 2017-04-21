@@ -7,9 +7,9 @@
     "url": "https://github.com/mohayonao/pseudo-audio-param/issues"
   },
   "devDependencies": {
-    "istanbul": "^0.4.2",
-    "mocha": "^2.4.5",
-    "sinon": "^1.17.3"
+    "istanbul": "^0.4.5",
+    "mocha": "^2.5.3",
+    "sinon": "^1.17.7"
   },
   "files": [
     "lib",
