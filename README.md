@@ -1,7 +1,7 @@
 # pseudo-audio-param
-[![Build Status](http://img.shields.io/travis/mohayonao/pseudo-audio-param.svg?style=flat-square)](https://travis-ci.org/mohayonao/pseudo-audio-param)
-[![NPM Version](http://img.shields.io/npm/v/pseudo-audio-param.svg?style=flat-square)](https://www.npmjs.org/package/pseudo-audio-param)
-[![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](http://mohayonao.mit-license.org/)
+[![Build Status](https://img.shields.io/travis/mohayonao/pseudo-audio-param.svg?style=flat-square)](https://travis-ci.org/mohayonao/pseudo-audio-param)
+[![NPM Version](https://img.shields.io/npm/v/pseudo-audio-param.svg?style=flat-square)](https://www.npmjs.org/package/pseudo-audio-param)
+[![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://mohayonao.mit-license.org/)
 
 > Simulate scheduled AudioParam values
 
@@ -31,6 +31,7 @@ compatible interfaces with [AudioParam](https://www.w3.org/TR/webaudio/#AudioPar
 - `setTargetAtTime(value: number, time: number: timeConstant: number): self`
 - `setValueCurveAtTime(values: Float32Array, time: number, duration: number): self`
 - `cancelScheduledValues(time: number): self`
+- `cancelAndHoldAtTime(time: number): self`
 
 ## Example
 https://www.w3.org/TR/webaudio/#example1-AudioParam
