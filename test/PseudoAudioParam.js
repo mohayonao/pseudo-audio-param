@@ -72,6 +72,26 @@ describe("PseudoAudioParam", () => {
       assert(param.getValueAtTime(20) === 3);
       assert(param.getValueAtTime(25) === 3);
     });
+
+    it("with cancelAndHoldAtTime", () => {
+      const param = new PseudoAudioParam()
+        .setValueAtTime(0, 0)
+        .linearRampToValueAtTime(1, 10)
+        .cancelAndHoldAtTime(5)
+        .linearRampToValueAtTime(0, 10);
+
+        assert(param instanceof PseudoAudioParam);
+        assert.deepEqual(param.events, [
+          { type: "setValueAtTime", time: 0, value: 0, args: [ 0, 0 ] },
+          { type: "linearRampToValueAtTime", time: 5, value: 0.5, args: [ 0.5, 5 ] },
+          { type: "linearRampToValueAtTime", time: 10, value: 0, args: [ 0, 10 ] }
+        ]);
+        assert(param.getValueAtTime(0) === 0);
+        assert(param.getValueAtTime(2.5) === 0.25);
+        assert(param.getValueAtTime(5) === 0.5);
+        assert(param.getValueAtTime(7.5) === 0.25);
+        assert(param.getValueAtTime(10) === 0);
+    });
   });
 
   describe("#exponentialRampToValueAtTime(value: number, time: number): self", () => {
@@ -94,6 +114,26 @@ describe("PseudoAudioParam", () => {
       assert(closeTo(param.getValueAtTime(15), 1.73205108, 1e-4));
       assert(param.getValueAtTime(20) === 3);
       assert(param.getValueAtTime(25) === 3);
+    });
+
+    it("with cancelAndHoldAtTime", () => {
+      const param = new PseudoAudioParam()
+        .setValueAtTime(1e-4, 0)
+        .exponentialRampToValueAtTime(1, 10)
+        .cancelAndHoldAtTime(5)
+        .exponentialRampToValueAtTime(1e-4, 10);
+
+        assert(param instanceof PseudoAudioParam);
+        assert.deepEqual(param.events, [
+          { type: "setValueAtTime", time: 0, value: 1e-4, args: [ 1e-4, 0 ] },
+          { type: "exponentialRampToValueAtTime", time: 5, value: 0.01, args: [ 0.01, 5 ] },
+          { type: "exponentialRampToValueAtTime", time: 10, value: 1e-4, args: [ 1e-4, 10 ] }
+        ]);
+        assert(param.getValueAtTime(0) === 1e-4);
+        assert(param.getValueAtTime(2.5) === 1e-3);
+        assert(param.getValueAtTime(5) === 1e-2);
+        assert(param.getValueAtTime(7.5) === 1e-3);
+        assert(param.getValueAtTime(10) === 1e-4);
     });
   });
 
@@ -119,6 +159,29 @@ describe("PseudoAudioParam", () => {
       assert(closeTo(param.getValueAtTime(20), 0.993262, 1e-4));
       assert(closeTo(param.getValueAtTime(25), 2.835276, 1e-4));
     });
+
+    it("inserts 'setTargetAtTime' event into the schedule at time", () => {
+      const param = new PseudoAudioParam()
+        .setValueAtTime(0, 0)
+        .setTargetAtTime(2, 20, 2)
+        .setTargetAtTime(1, 10, 2)
+        .cancelAndHoldAtTime(15)
+        .setTargetAtTime(3, 20, 2);
+
+      assert(param instanceof PseudoAudioParam);
+      assert.deepEqual(param.events, [
+        { type: "setValueAtTime", time: 0, value: 0, args: [ 0, 0 ] },
+        { type: "setTargetAtTime", time: 10, value: 1, timeConstant: 2, args: [ 1, 10, 2 ], cancelTime: 15 },
+        { type: "setTargetAtTime", time: 20, value: 3, timeConstant: 2, args: [ 3, 20, 2 ] }
+      ]);
+
+      assert(param.getValueAtTime(0) === 0);
+      assert(param.getValueAtTime(5) === 0);
+      assert(param.getValueAtTime(10) === 0);
+      assert(closeTo(param.getValueAtTime(15), 0.917915, 1e-4));
+      assert(closeTo(param.getValueAtTime(20), 0.917915, 1e-4));
+      assert(closeTo(param.getValueAtTime(25), 2.829092, 1e-4));
+    });
   });
 
   describe("#setValueCurveAtTime(curve: Float32Array, time: number, duration: number): self", () => {
@@ -140,6 +203,30 @@ describe("PseudoAudioParam", () => {
       assert(param.getValueAtTime(5) === 0);
       assert(param.getValueAtTime(10) === 0);
       assert(closeTo(param.getValueAtTime(15), 0.999849, 1e-4));
+      assert(param.getValueAtTime(20) === 0);
+      assert(closeTo(param.getValueAtTime(25), 0.702715, 1e-4));
+    });
+
+    it("with cancelAndHoldAtTime", () => {
+      const curve = new Float32Array(128).map((_, i) => Math.sin(Math.PI * i / 128));
+      const param = new PseudoAudioParam()
+        .setValueAtTime(0, 0)
+        .setValueCurveAtTime(curve, 20, 10)
+        .setValueCurveAtTime(curve, 10, 10)
+        .cancelAndHoldAtTime(15)
+        .setValueCurveAtTime(curve, 20, 20);
+
+      assert(param instanceof PseudoAudioParam);
+      assert.deepEqual(param.events, [
+        { type: "setValueAtTime", time: 0, value: 0, args: [ 0, 0 ] },
+        { type: "setValueCurveAtTime", time: 10, curve: curve, duration: 10, args: [ curve, 10, 10 ], cancelTime: 15 },
+        { type: "setValueCurveAtTime", time: 20, curve: curve, duration: 20, args: [ curve, 20, 20 ] }
+      ]);
+      assert(param.getValueAtTime(0) === 0);
+      assert(param.getValueAtTime(5) === 0);
+      assert(param.getValueAtTime(10) === 0);
+      assert(closeTo(param.getValueAtTime(15), 0.999849, 1e-4));
+      assert(closeTo(param.getValueAtTime(18), 0.999849, 1e-4));
       assert(param.getValueAtTime(20) === 0);
       assert(closeTo(param.getValueAtTime(25), 0.702715, 1e-4));
     });
