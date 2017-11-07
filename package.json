@@ -7,8 +7,11 @@
     "url": "https://github.com/mohayonao/pseudo-audio-param/issues"
   },
   "devDependencies": {
+    "eslint": "^4.10.0",
     "istanbul": "^0.4.5",
-    "mocha": "^2.5.3"
+    "mocha": "^4.0.1",
+    "npm-run-all": "^4.1.2",
+    "rimraf": "^2.6.2"
   },
   "files": [
     "lib",
@@ -30,9 +33,11 @@
   "scripts": {
     "cover": "istanbul cover --report text --report html --report lcov _mocha",
     "postversion": "git push && git push --tags",
-    "prepublish": "npm run test",
-    "preversion": "npm run test",
+    "clean": "rimraf -rf coverage npm-debug.log",
+    "lint": "eslint lib test",
+    "prepublish": "npm-run-all clean lint test",
+    "preversion": "npm-run-all clean lint test",
     "test": "mocha",
-    "travis": "npm run test"
+    "travis": "npm-run-all lint test"
   }
 }

@@ -40,6 +40,7 @@ describe("#applyTo(audioParam: AudioParam, reset: boolean): self", () => {
       .setValueAtTime(1, 10)
       .applyTo(audioParam);
 
+    assert(param);
     assert.deepEqual(audioParam.called, [
       [ "setValueAtTime", 0, 0 ],
       [ "setValueAtTime", 1, 10 ],
@@ -53,11 +54,12 @@ describe("#applyTo(audioParam: AudioParam, reset: boolean): self", () => {
       .setValueAtTime(1, 10)
       .applyTo(audioParam, true);
 
-      assert.deepEqual(audioParam.called, [
-        [ "cancelScheduledValues", 0 ],
-        [ "setValueAtTime", 0, 0 ],
-        [ "setValueAtTime", 1, 10 ],
-      ]);
+    assert(param);
+    assert.deepEqual(audioParam.called, [
+      [ "cancelScheduledValues", 0 ],
+      [ "setValueAtTime", 0, 0 ],
+      [ "setValueAtTime", 1, 10 ],
+    ]);
   });
 
   it("with cancelAndHoldAtTime", () => {
@@ -70,6 +72,7 @@ describe("#applyTo(audioParam: AudioParam, reset: boolean): self", () => {
       .setTargetAtTime(3, 20, 2)
       .applyTo(audioParam);
 
+    assert(param);
     assert.deepEqual(audioParam.called, [
       [ "setValueAtTime", 0, 0 ],
       [ "setTargetAtTime", 1, 10, 2 ],
